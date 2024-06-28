@@ -8,5 +8,15 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "wujie": "^1.0.22"
+  },
+  "devDependencies": {
+    "ts-loader": "^9.5.1",
+    "typescript": "^5.5.2",
+    "vue": "^3.4.30",
+    "webpack": "^5.92.1",
+    "webpack-cli": "^5.1.4"
+  }
 }
