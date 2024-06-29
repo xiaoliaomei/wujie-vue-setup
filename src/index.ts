@@ -1,6 +1,6 @@
-import { defineComponent, h, getCurrentInstance, onMounted } from "vue";
+import { defineComponent, h, getCurrentInstance, onMounted,watch ,onBeforeMount} from "vue";
 import type { PropType } from "vue";
-import { startApp } from "wujie";
+import { startApp ,bus} from "wujie";
 import { Props } from "./type";
 const wujie = defineComponent({
   props: {
@@ -51,7 +51,7 @@ const wujie = defineComponent({
       default: null,
     },
   },
-  setup(props) {
+  setup(props,{emit}) {
     const instance = getCurrentInstance();
     const init = () => {
       // 微前端初始化方法就可以了
@@ -79,14 +79,30 @@ const wujie = defineComponent({
         deactivated: props.deactivated,
       });
     };
-
+    watch([props.name,props.url],()=>{
+      init()
+    })
+    const hanlderEmit = (event:string,...arg:any[])=>{
+      emit(event,...arg)
+    }
     onMounted(() => {
+      bus.$onAll(hanlderEmit)
       init();
     });
+    onBeforeMount(()=>{
+      bus.$offAll(hanlderEmit)
+    })
     return () =>
       h("div", {
-        style: {},
+        style: {
+          width:props.width,
+          height:props.height,
+        },
         ref: "wujie", //方便后面读取使用
       });
   },
 });
+wujie.install = (app) => {
+  app.component("WujieVue", wujie)
+}
+export default wujie
